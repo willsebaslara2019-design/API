@@ -1,0 +1,243 @@
+package modelo;
+
+import java.util.Iterator;
+
+public class ListaDob implements Iterable<Item> {
+
+    Nodo primero;
+    Nodo ultimo;
+    int cantidad;
+
+    public ListaDob() {
+        primero = null;
+        ultimo = null;
+        cantidad = 0;
+    }
+
+    public void add(Item item) {
+
+        Nodo nuevo = new Nodo(item);
+
+        if (primero == null) {
+            primero = nuevo;
+            ultimo = nuevo;
+            cantidad++;
+            return;
+        }
+
+        if (item.compareTo(primero.item) <= 0) {
+            nuevo.sig = primero;
+            primero.ant = nuevo;
+            primero = nuevo;
+            cantidad++;
+            return;
+        }
+
+        if (item.compareTo(ultimo.item) >= 0) {
+            nuevo.ant = ultimo;
+            ultimo.sig = nuevo;
+            ultimo = nuevo;
+            cantidad++;
+            return;
+        }
+
+        add(item, primero);
+    }
+
+    private void add(Item item, Nodo actual) {
+
+        if (actual == null) {
+            return;
+        }
+
+        if (item.compareTo(actual.item) <= 0) {
+
+            Nodo nuevo = new Nodo(item);
+
+            nuevo.ant = actual.ant;
+            nuevo.sig = actual;
+
+            actual.ant.sig = nuevo;
+            actual.ant = nuevo;
+
+            cantidad++;
+            return;
+        }
+
+        add(item, actual.sig);
+    }
+
+    public void remove(Item item) {
+        remove(item, primero);
+    }
+
+    private void remove(Item item, Nodo actual) {
+
+        if (actual == null) {
+            return;
+        }
+
+        if (item.compareTo(actual.item) == 0) {
+
+            if (actual == primero) {
+                primero = actual.sig;
+
+                if (primero != null) {
+                    primero.ant = null;
+                } else {
+                    ultimo = null;
+                }
+
+            } else if (actual == ultimo) {
+                ultimo = actual.ant;
+                ultimo.sig = null;
+
+            } else {
+                actual.ant.sig = actual.sig;
+                actual.sig.ant = actual.ant;
+            }
+
+            cantidad--;
+            return;
+        }
+
+        if (item.compareTo(actual.item) < 0) {
+            return;
+        }
+
+        remove(item, actual.sig);
+    }
+
+    public boolean isEmpty() {
+        return primero == null;
+    }
+
+    public int size() {
+        return cantidad;
+    }
+
+    public boolean find(Item item) {
+        return find(item, primero);
+    }
+
+    private boolean find(Item item, Nodo actual) {
+
+        if (actual == null) {
+            return false;
+        }
+
+        if (item.compareTo(actual.item) == 0) {
+            return true;
+        }
+
+        if (item.compareTo(actual.item) < 0) {
+            return false;
+        }
+
+        return find(item, actual.sig);
+    }
+
+    public boolean iguales(ListaDob otra) {
+
+        if (size() != otra.size()) {
+            return false;
+        }
+
+        return iguales(primero, otra.primero);
+    }
+
+    private boolean iguales(Nodo a, Nodo b) {
+
+        if (a == null && b == null) {
+            return true;
+        }
+
+        if (a == null || b == null) {
+            return false;
+        }
+
+        if (a.item.compareTo(b.item) != 0) {
+            return false;
+        }
+
+        return iguales(a.sig, b.sig);
+    }
+
+    public boolean semejantes(ListaDob otra) {
+
+        if (size() != otra.size()) {
+            return false;
+        }
+
+        return semejantes(primero, otra);
+    }
+
+    private boolean semejantes(Nodo actual, ListaDob otra) {
+
+        if (actual == null) {
+            return true;
+        }
+
+        if (!otra.find(actual.item)) {
+            return false;
+        }
+
+        return semejantes(actual.sig, otra);
+    }
+
+    public void recorrerInicioFin() {
+        recorrerInicioFin(primero);
+    }
+
+    private void recorrerInicioFin(Nodo actual) {
+
+        if (actual == null) {
+            return;
+        }
+
+        System.out.print(actual.item + " ");
+
+        recorrerInicioFin(actual.sig);
+    }
+
+    public void recorrerFinInicio() {
+        recorrerFinInicio(ultimo);
+    }
+
+    private void recorrerFinInicio(Nodo actual) {
+
+        if (actual == null) {
+            return;
+        }
+
+        System.out.print(actual.item + " ");
+
+        recorrerFinInicio(actual.ant);
+    }
+
+    @Override
+    public Iterator<Item> iterator() {
+        return new IteradorLista(primero);
+    }
+
+    private class IteradorLista implements Iterator<Item> {
+
+        Nodo actual;
+
+        public IteradorLista(Nodo actual) {
+            this.actual = actual;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return actual != null;
+        }
+
+        @Override
+        public Item next() {
+            Item item = actual.item;
+            actual = actual.sig;
+            return item;
+        }
+    }
+}
