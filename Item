@@ -1,0 +1,14 @@
+package modelo;
+
+public class Nodo {
+
+    Item item;
+    Nodo ant;
+    Nodo sig;
+
+    public Nodo(Item item) {
+        this.item = item;
+        this.ant = null;
+        this.sig = null;
+    }
+}
