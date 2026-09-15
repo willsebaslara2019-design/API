@@ -1,0 +1,68 @@
+package interfaz;
+import modelo.*;
+/**
+ *
+ * @author wills
+ */
+public class InterfazApp {
+
+    public static void main(String[] args) {
+
+        ListaDob lista = new ListaDob();
+
+        lista.add(new Item(8));
+        lista.add(new Item(3));
+        lista.add(new Item(10));
+        lista.add(new Item(1));
+        lista.add(new Item(5));
+
+        System.out.println("Lista inicio a fin:");
+        lista.recorrerInicioFin();
+
+        System.out.println();
+
+        System.out.println("Lista fin a inicio:");
+        lista.recorrerFinInicio();
+
+        System.out.println();
+
+        System.out.println("Esta vacia?: " + lista.isEmpty());
+
+        System.out.println("Tamano: " + lista.size());
+
+        System.out.println(" Existe el 5?: "
+                + lista.find(new Item(5)));
+
+        ListaDob lista2 = new ListaDob();
+
+        lista2.add(new Item(8));
+        lista2.add(new Item(3));
+        lista2.add(new Item(10));
+        lista2.add(new Item(1));
+        lista2.add(new Item(5));
+        
+        
+        System.out.println();
+        System.out.println("LISTA 1");
+        System.out.println("Lista inicio a fin:");
+        lista.recorrerInicioFin();
+        System.out.println();
+        System.out.println("LISTA 2");
+        System.out.println("Lista inicio a fin:");
+        lista2.recorrerInicioFin();
+        System.out.println();
+        System.out.println();
+        System.out.println(" Las listas son iguales?: "
+                + lista.iguales(lista2));
+
+        System.out.println("Las listas son semejantes?: "
+                + lista.semejantes(lista2));
+
+        lista.remove(new Item(5));
+
+        System.out.println("Despues de eliminar 5:");
+        lista.recorrerInicioFin();
+
+        System.out.println();
+    }
+}
